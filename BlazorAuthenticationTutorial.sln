@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthenticationTutorial.Server", "BlazorAuthenticationTutorial\Server\BlazorAuthenticationTutorial.Server.csproj", "{8F039189-17E2-448A-83FD-2E832B86A7E1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthenticationTutorial.Client", "BlazorAuthenticationTutorial\Client\BlazorAuthenticationTutorial.Client.csproj", "{42F84871-433C-481F-B62B-721FC262F791}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthenticationTutorial.Shared", "BlazorAuthenticationTutorial\Shared\BlazorAuthenticationTutorial.Shared.csproj", "{1364B446-F65B-4565-B928-3D788BE1BBFB}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{8F039189-17E2-448A-83FD-2E832B86A7E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F039189-17E2-448A-83FD-2E832B86A7E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F039189-17E2-448A-83FD-2E832B86A7E1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{42F84871-433C-481F-B62B-721FC262F791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{42F84871-433C-481F-B62B-721FC262F791}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{42F84871-433C-481F-B62B-721FC262F791}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{42F84871-433C-481F-B62B-721FC262F791}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
