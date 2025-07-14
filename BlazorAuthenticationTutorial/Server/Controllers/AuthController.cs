@@ -1,11 +1,12 @@
 ﻿using BlazorAuthenticationTutorial.Shared;
+using BlazorAuthenticationTutorial.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BlazorAuthenticationTutorial.Shared.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorAuthenticationTutorial.Server.Controllers;
 
@@ -13,6 +14,13 @@ namespace BlazorAuthenticationTutorial.Server.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    private readonly Authentication authConfig;
+
+    public AuthController(IOptions<Authentication> _authConfig)
+    {
+        authConfig = _authConfig.Value;
+    }
+
     [HttpPost]
     [Route("login")]
     public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto request)
@@ -41,7 +49,7 @@ public class AuthController : ControllerBase
             ValidateIssuerSigningKey = true,
             ValidIssuer = "https://your-issuer.com", // Sostituisci con il tuo issuer
             ValidAudience = "https://your-audience.com", // Sostituisci con il tuo audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-256-bit-secret-your-256-bit-secret-your-256-bit-secret-")) // Chiave segreta
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.SecretKey))   // Chiave segreta
         };
         try
         {
@@ -81,7 +89,7 @@ public class AuthController : ControllerBase
     }
 
 
-    public static string GenerateJwtToken()
+    public string GenerateJwtToken()
     {
         // Definizione dei claims
         var claims = new[]
@@ -90,7 +98,7 @@ public class AuthController : ControllerBase
         };
 
         // Chiave segreta per firmare il token
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-256-bit-secret-your-256-bit-secret-your-256-bit-secret-"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.SecretKey));
 
         // Credenziali di firma
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -115,5 +123,4 @@ public class AuthController : ControllerBase
     {
         return Task.FromResult<IActionResult>(Ok("This is a secret endpoint! You must be authenticated to access it."));
     }
-
 }

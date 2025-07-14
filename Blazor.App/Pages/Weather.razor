@@ -1,5 +1,6 @@
 ﻿@page "/weather"
-@inject HttpClient Http
+@using BlazorAuthenticationTutorial.Shared
+@inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>Weather</PageTitle>
 
@@ -41,23 +42,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await Http.GetAsync("https://localhost:44373/WeatherForecast");
+        var client = HttpClientFactory.CreateClient("BackendAPI");
+
+        var response = await client.GetAsync("WeatherForecast");
 
         if (response.IsSuccessStatusCode)
         {
             // Deserializza il contenuto della risposta in un array di WeatherForecast
             forecasts = await response.Content.ReadFromJsonAsync<WeatherForecast[]>();
         }
-    }
-
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string? Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }

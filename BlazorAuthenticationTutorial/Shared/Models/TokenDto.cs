@@ -15,7 +15,11 @@ public class LoginModel
     public string Password { get; set; }
 }
     
-public class TokenResponse
+public class TokenResponse : TokenDto
 {
-    public string Token { get; set; }
+}
+
+public class Authentication
+{
+    public string SecretKey { get; set; }
 }

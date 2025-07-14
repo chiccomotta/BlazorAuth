@@ -1,3 +1,4 @@
+using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -5,7 +6,8 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Leggi il valore di SecretKey dalla configurazione
+var secretKey = builder.Configuration["Authentication:SecretKey"];
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -18,12 +20,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-256-bit-secret-your-256-bit-secret-your-256-bit-secret-")),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
             ValidIssuer = "https://your-issuer.com",
             ValidAudience = "https://your-audience.com",
             RoleClaimType = ClaimTypes.Role // Mappa il claim `ClaimTypes.Role` per i ruoli
         };
     });
+
+builder.Services.Configure<Authentication>(builder.Configuration.GetSection("Authentication"));
 
 // Aggiungi i servizi CORS
 builder.Services.AddCors(options =>
