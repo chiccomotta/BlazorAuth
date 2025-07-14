@@ -5,28 +5,25 @@ using System.Security.Claims;
 
 namespace Blazor.App.Authentication;
 
-public class JwtAuthenticationStateProvider : AuthenticationStateProvider
+public class JwtAuthenticationStateProvider(ILocalStorageService localStorage) : AuthenticationStateProvider
 {
-    private readonly ILocalStorageService _localStorage;
-    public JwtAuthenticationStateProvider(ILocalStorageService localStorage)
-    {
-        _localStorage = localStorage;
-    }
-        
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var token = await _localStorage.GetItemAsync<string>("authToken");
+        var token = await localStorage.GetItemAsync<string>("authToken");
         if (string.IsNullOrWhiteSpace(token))
         {
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
+        
         var handler = new JwtSecurityTokenHandler();
         var jwtToken = handler.ReadJwtToken(token);
+        
         if (jwtToken.ValidTo < DateTime.UtcNow)
         {
-            await _localStorage.RemoveItemAsync("authToken");
+            await localStorage.RemoveItemAsync("authToken");
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
         }
+        
         var claims = jwtToken.Claims;
         var identity = new ClaimsIdentity(claims, "jwt");
         var user = new ClaimsPrincipal(identity);
