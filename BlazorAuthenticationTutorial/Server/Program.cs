@@ -25,6 +25,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Aggiungi i servizi CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsSettings", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader() // Consenti qualsiasi intestazione
+            .AllowAnyMethod(); // Consenti qualsiasi metodo HTTP (GET, POST, ecc.)
+    });
+});
 
 var app = builder.Build();
 
@@ -41,7 +51,7 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("CorsSettings");
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 

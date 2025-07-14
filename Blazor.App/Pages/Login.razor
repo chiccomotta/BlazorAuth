@@ -1,0 +1,71 @@
+﻿@page "/login"
+
+@using Blazor.App.Authentication
+@using BlazorAuthenticationTutorial.Shared.Models
+@using Blazored.LocalStorage
+
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+@inject JwtAuthenticationStateProvider authStateProvider
+
+    <h3>Login</h3>
+
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+    }
+
+    <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <InputText id="username" class="form-control" @bind-Value="loginModel.Username" />
+            <ValidationMessage For="@(() => loginModel.Username)" />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" />
+            <ValidationMessage For="@(() => loginModel.Password)" />
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </EditForm>
+
+    @code {
+        private LoginModel loginModel = new LoginModel();
+        private string ErrorMessage;
+
+        private async Task HandleLogin()
+        {
+            var client = HttpClientFactory.CreateClient("BackendAPI");
+
+            try
+            {
+                // Esegui la chiamata all'API per il login
+                var response = await client.PostAsJsonAsync("api/auth/login", loginModel);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
+                    // Salva il token nel localStorage
+                    await LocalStorage.SetItemAsync("authToken", result.Token);
+
+                    // Notifica il nuovo stato di autenticazione
+                    authStateProvider.NotifyUserAuthentication(result.Token);
+
+                    // Reindirizza alla pagina principale o protetta
+                    NavigationManager.NavigateTo("/");
+                }
+                else
+                {
+                    ErrorMessage = "Login failed. Please check your credentials.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"An error occurred: {ex.Message}";
+            }
+        }
+    }
+

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthenticationTutoria
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorAuthenticationTutorial.Shared", "BlazorAuthenticationTutorial\Shared\BlazorAuthenticationTutorial.Shared.csproj", "{1364B446-F65B-4565-B928-3D788BE1BBFB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.App", "Blazor.App\Blazor.App.csproj", "{09EE03D8-9791-4447-AB01-CDA09FE29A4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1364B446-F65B-4565-B928-3D788BE1BBFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09EE03D8-9791-4447-AB01-CDA09FE29A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09EE03D8-9791-4447-AB01-CDA09FE29A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09EE03D8-9791-4447-AB01-CDA09FE29A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09EE03D8-9791-4447-AB01-CDA09FE29A4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
