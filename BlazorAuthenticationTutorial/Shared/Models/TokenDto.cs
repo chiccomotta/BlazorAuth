@@ -18,8 +18,3 @@ public class LoginModel
 public class TokenResponse : TokenDto
 {
 }
-
-public class Authentication
-{
-    public string SecretKey { get; set; }
-}

@@ -1,4 +1,5 @@
 ﻿@page "/weather"
+@using System.Net
 @using Blazor.App.Authentication
 @using BlazorAuthenticationTutorial.Shared
 @using Blazored.LocalStorage
@@ -14,7 +15,9 @@
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
@@ -22,23 +25,23 @@ else
     {
         <table class="table">
             <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var forecast in forecasts)
-                {
-                    <tr>
-                        <td>@forecast.Date.ToShortDateString()</td>
-                        <td>@forecast.TemperatureC</td>
-                        <td>@forecast.TemperatureF</td>
-                        <td>@forecast.Summary</td>
-                    </tr>
-                }
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
             </tbody>
         </table>
     }
@@ -51,11 +54,11 @@ else
 }
 
 @code {
-private WeatherForecast[]? forecasts;
-private bool IsAuthorized = false;
+    private WeatherForecast[]? forecasts;
+    private bool IsAuthorized;
 
-protected override async Task OnInitializedAsync()
-{
+    protected override async Task OnInitializedAsync()
+    {
         var client = HttpClientFactory.CreateClient("BackendAPI");
 
         var response = await client.GetAuthenticatedAsync(localStorage, "WeatherForecast");
@@ -67,10 +70,11 @@ protected override async Task OnInitializedAsync()
             IsAuthorized = true;
         }
 
-        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             IsAuthorized = false;
             forecasts = [];
         }
-}
+    }
+
 }

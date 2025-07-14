@@ -47,8 +47,8 @@ public class AuthController : ControllerBase
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "https://your-issuer.com", // Sostituisci con il tuo issuer
-            ValidAudience = "https://your-audience.com", // Sostituisci con il tuo audience
+            ValidIssuer = authConfig.Issuer,        // Sostituisci con il tuo issuer
+            ValidAudience = authConfig.Audience,    // Sostituisci con il tuo audience
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.SecretKey))   // Chiave segreta
         };
         try
@@ -105,11 +105,11 @@ public class AuthController : ControllerBase
 
         // Creazione del token
         var token = new JwtSecurityToken(
-            issuer: "https://your-issuer.com", // Emittente del token
-            audience: "https://your-audience.com", // Destinatario del token
-            claims: claims, // Claims inclusi nel token
-            expires: DateTime.UtcNow.AddMinutes(30), // Scadenza del token
-            signingCredentials: credentials // Credenziali di firma
+            issuer: authConfig.Issuer,                  // Emittente del token
+            audience: authConfig.Audience,              // Destinatario del token
+            claims: claims,                             // Claims inclusi nel token
+            expires: DateTime.UtcNow.AddMinutes(30),    // Scadenza del token
+            signingCredentials: credentials             // Credenziali di firma
         );
 
         // Restituzione del token come stringa
