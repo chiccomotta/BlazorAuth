@@ -1,16 +1,57 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazor.App.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
+
+@inherits LayoutComponentBase
+@inject JwtAuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
-
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            @if (isAuthenticated)
+            {
+                <a href="#" @onclick="Logout">Logout</a>
+            }
+            else
+            {
+                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            }
         </div>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+@code {
+    private bool isAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged += task =>
+        {
+            InvokeAsync(async () =>
+            {
+                var authState = await task;
+                isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+                // Forza l'aggiornamento dell'interfaccia utente
+                StateHasChanged();
+            });
+        };
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    private async Task Logout()
+    {
+        // Esegui la disconnessione (esempio per cookie o token)
+        await AuthenticationStateProvider.LogoutAsync();
+
+        // Reindirizza l'utente alla pagina di login o home
+        NavigationManager.NavigateTo("/login", true);
+    }
+}

@@ -43,7 +43,16 @@ public class JwtAuthenticationStateProvider(ILocalStorageService localStorage) :
         var authState = Task.FromResult(new AuthenticationState(anonymousUser));
         NotifyAuthenticationStateChanged(authState);
     }
+    
+    public async Task LogoutAsync()
+    {
+        // Rimuovi il token JWT dal localStorage
+        await localStorage.RemoveItemAsync("authToken");
         
+        // Notifica il cambio di stato
+        NotifyUserLogout();
+    }
+
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)
     {
         var handler = new JwtSecurityTokenHandler();

@@ -6,8 +6,11 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Leggi il valore di SecretKey dalla configurazione
+// Retrieve authentication settings from configuration
 var secretKey = builder.Configuration["Authentication:SecretKey"];
+var issuer = builder.Configuration["Authentication:Issuer"];
+var audience = builder.Configuration["Authentication:Audience"];
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -21,8 +24,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
-            ValidIssuer = "https://your-issuer.com",
-            ValidAudience = "https://your-audience.com",
+            ValidIssuer = issuer,
+            ValidAudience = audience,
             RoleClaimType = ClaimTypes.Role // Mappa il claim `ClaimTypes.Role` per i ruoli
         };
     });

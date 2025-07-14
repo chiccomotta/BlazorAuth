@@ -25,11 +25,18 @@ public class AuthController : ControllerBase
     [Route("login")]
     public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto request)
     {
-        var token = GenerateJwtToken();
-        return new TokenDto
+        if (request.Username == "chicco" && request.Password == "password")
         {
-            Token = token
-        };
+            var token = GenerateJwtToken();
+            return new TokenDto
+            {
+                Token = token
+            };
+        }
+        else
+        {
+            return Unauthorized();
+        }
     }
 
     [HttpGet("validate")]
