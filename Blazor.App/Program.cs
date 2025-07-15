@@ -17,6 +17,8 @@ builder.Services.AddHttpClient("BackendAPI", client =>
     client.BaseAddress = new Uri("https://localhost:44373/"); // URL della tua API
 });
 
+// test
+
 // Configura l'autenticazione basata su JWT
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<JwtAuthenticationStateProvider>();
