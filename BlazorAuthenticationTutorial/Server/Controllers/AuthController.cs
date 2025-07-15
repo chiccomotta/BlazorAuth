@@ -101,7 +101,7 @@ public class AuthController : ControllerBase
         // Definizione dei claims
         var claims = new[]
         {
-            new Claim(ClaimTypes.Role, "Administrator"),   // Nome dell'utente
+            new Claim(ClaimTypes.Role, "Admin"),   
         };
 
         // Chiave segreta per firmare il token

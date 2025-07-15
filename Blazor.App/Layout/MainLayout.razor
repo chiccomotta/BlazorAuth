@@ -13,7 +13,8 @@
         <div class="top-row px-4">
             @if (isAuthenticated)
             {
-                <a href="#" @onclick="Logout">Logout</a>
+                
+                <button type="button" class="btn btn-link" onclick="@Logout">Logout</button>
             }
             else
             {
@@ -52,6 +53,6 @@
         await AuthenticationStateProvider.LogoutAsync();
 
         // Reindirizza l'utente alla pagina di login o home
-        NavigationManager.NavigateTo("/login", true);
+        NavigationManager.NavigateTo("login", false);
     }
 }
