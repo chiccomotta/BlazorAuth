@@ -31,20 +31,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-        AuthenticationStateProvider.AuthenticationStateChanged += task =>
-        {
-            InvokeAsync(async () =>
-            {
-                var authState = await task;
-                isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
-
-                // Forza l'aggiornamento dell'interfaccia utente
-                StateHasChanged();
-            });
-        };
+        AuthenticationStateProvider.AuthenticationStateChanged += OnAuthenticationStateChanged;
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+    }
+
+    private void OnAuthenticationStateChanged(Task<AuthenticationState> task)
+    {
+        InvokeAsync(async () =>
+        {
+            var authState = await task;
+            isAuthenticated = authState.User.Identity?.IsAuthenticated ?? false;
+
+            // Forza l'aggiornamento dell'interfaccia utente
+            StateHasChanged();
+        });
     }
 
     private async Task Logout()
@@ -52,7 +54,13 @@
         // Esegui la disconnessione (esempio per cookie o token)
         await AuthenticationStateProvider.LogoutAsync();
 
-        // Reindirizza l'utente alla pagina di login o home
+        // Reindirizza l'utente alla pagina di login (non forza il ricaricamento totale dell'applicazione)
         NavigationManager.NavigateTo("login", false);
+    }
+
+    public void Dispose()
+    {
+        AuthenticationStateProvider.AuthenticationStateChanged -= OnAuthenticationStateChanged;
+        Console.WriteLine("Component disposed");
     }
 }
