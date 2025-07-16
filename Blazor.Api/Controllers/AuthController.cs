@@ -1,23 +1,27 @@
-﻿using BlazorAuthenticationTutorial.Shared;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Blazor.Api.Services;
+using BlazorAuthenticationTutorial.Shared;
 using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
-namespace BlazorAuthenticationTutorial.Server.Controllers;
+namespace Blazor.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
 {
     private readonly Authentication authConfig;
+    private readonly ICosmosDbService cosmos;
 
-    public AuthController(IOptions<Authentication> _authConfig)
+    public AuthController(IOptions<Authentication> _authConfig, ICosmosDbService _cosmos)
     {
+        cosmos = _cosmos;
         authConfig = _authConfig.Value;
     }
 
@@ -92,6 +96,7 @@ public class AuthController : ControllerBase
     [Route("hello")]
     public async Task<IActionResult> Hello()
     {
+        // var result = cosmos.GetItemAsync<TokenDto>("1", "category");
         return Ok("Hello from the API!");
     }
 

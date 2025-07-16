@@ -4,7 +4,7 @@ namespace BlazorAuthenticationTutorial.Shared.Models;
 
 public class TokenDto
 {
-    public string Token { get; set; }
+    public string? Token { get; set; }
 }
 
 public class LoginModel
@@ -15,6 +15,4 @@ public class LoginModel
     public string Password { get; set; }
 }
     
-public class TokenResponse : TokenDto
-{
-}
+public class TokenResponse : TokenDto;

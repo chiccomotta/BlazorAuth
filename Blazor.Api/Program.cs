@@ -1,3 +1,5 @@
+using Blazor.Api.Models.Cosmos;
+using Blazor.Api.Services;
 using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +44,12 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod(); // Consenti qualsiasi metodo HTTP (GET, POST, ecc.)
     });
 });
+
+// Configura i servizi per Cosmos DB
+builder.Services.Configure<CosmosDbSettings>(builder.Configuration.GetSection("CosmosDb"));
+
+builder.Services.AddSingleton<ICosmosDbService, CosmosDbService>();
+
 
 var app = builder.Build();
 
