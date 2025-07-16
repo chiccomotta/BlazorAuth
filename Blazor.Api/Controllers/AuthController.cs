@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
     [Route("login")]
     public async Task<ActionResult<TokenDto>> Login([FromBody] UserLoginDto request)
     {
-        if (request.Username == "chicco" && request.Password == "password")
+        if (request.Username == "chicco" && request.Password == "motta")
         {
             var token = GenerateJwtToken();
             return new TokenDto
@@ -54,9 +54,9 @@ public class AuthController : ControllerBase
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = authConfig.Issuer,        // Sostituisci con il tuo issuer
-            ValidAudience = authConfig.Audience,    // Sostituisci con il tuo audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.SecretKey))   // Chiave segreta
+            ValidIssuer = authConfig.Issuer,        
+            ValidAudience = authConfig.Audience,    
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authConfig.SecretKey)) 
         };
         try
         {

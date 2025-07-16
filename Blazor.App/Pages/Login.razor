@@ -11,9 +11,9 @@
 
     <h3>Login</h3>
 
-    @if (!string.IsNullOrEmpty(ErrorMessage))
+    @if (!string.IsNullOrEmpty(errorMessage))
     {
-        <div class="alert alert-danger">@ErrorMessage</div>
+        <div class="alert alert-danger">@errorMessage</div>
     }
 
     <EditForm Model="loginModel" OnValidSubmit="HandleLogin">
@@ -34,7 +34,7 @@
 
     @code {
         private LoginModel loginModel = new LoginModel();
-        private string ErrorMessage;
+        private string? errorMessage;
 
         private async Task HandleLogin()
         {
@@ -59,12 +59,12 @@
                 }
                 else
                 {
-                    ErrorMessage = "Login failed. Please check your credentials.";
+                    errorMessage = "Login failed. Please check your credentials.";
                 }
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"An error occurred: {ex.Message}";
+                errorMessage = $"An error occurred: {ex.Message}";
             }
         }
     }
