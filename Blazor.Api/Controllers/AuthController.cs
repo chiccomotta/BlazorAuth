@@ -116,7 +116,7 @@ public class AuthController : ControllerBase
             .RuleFor(u => u.City, f => f.Address.City());      // Città fittizia
 
         // Genera 100 utenti
-        var users = userFaker.Generate(100);
+        var users = userFaker.Generate(5);
         await cosmos.AddItemsAsync<User>(users);
         return Ok("Items created");
     }

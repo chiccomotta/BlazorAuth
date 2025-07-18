@@ -3,6 +3,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
+using Blazor.Api.Models;
 
 namespace Blazor.Api.Services;
 
@@ -31,7 +32,7 @@ public class CosmosDbService : ICosmosDbService
             400).Result;
     }
 
-    public async Task<ItemResponse<T>> AddItemAsync<T>(T item, string partitionKey) where T : IPartitionKey
+    public async Task<ItemResponse<T>> AddItemAsync<T>(T item, string partitionKey) where T : EntityBase
     {
         var response = await _container.CreateItemAsync(
             item,
@@ -42,7 +43,7 @@ public class CosmosDbService : ICosmosDbService
         return response;
     }
 
-    public async Task AddItemsAsync<T>(IEnumerable<T> items) where T : IPartitionKey
+    public async Task AddItemsAsync<T>(IEnumerable<T> items) where T : EntityBase
     {
         var tasks = items.Select(item => _container.CreateItemAsync(item, new PartitionKey(item.PartitionKey)));
         await Task.WhenAll(tasks);
