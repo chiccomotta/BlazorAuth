@@ -3,6 +3,8 @@ using Blazor.Api.Services;
 using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Security.Claims;
 using System.Text;
 
@@ -13,8 +15,6 @@ var secretKey = builder.Configuration["Authentication:SecretKey"];
 var issuer = builder.Configuration["Authentication:Issuer"];
 var audience = builder.Configuration["Authentication:Audience"];
 
-
-builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -44,6 +44,14 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod(); // Consenti qualsiasi metodo HTTP (GET, POST, ecc.)
     });
 });
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        options.SerializerSettings.Formatting = Formatting.Indented;    // Opzionale: per una formattazione leggibile
+    });
+
 
 // Configura i servizi per Cosmos DB
 builder.Services.Configure<CosmosDbSettings>(builder.Configuration.GetSection("CosmosDb"));

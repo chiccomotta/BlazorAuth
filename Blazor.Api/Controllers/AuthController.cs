@@ -1,14 +1,18 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Diagnostics;
 using Blazor.Api.Services;
 using BlazorAuthenticationTutorial.Shared;
 using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Blazor.Api.Models;
+using Microsoft.Azure.Cosmos;
+using Newtonsoft.Json;
+using User = Blazor.Api.Models.User;
 
 namespace Blazor.Api.Controllers;
 
@@ -96,8 +100,16 @@ public class AuthController : ControllerBase
     [Route("hello")]
     public async Task<IActionResult> Hello()
     {
-        // var result = cosmos.GetItemAsync<TokenDto>("1", "category");
-        return Ok("Hello from the API!");
+        var item = new User()
+        {
+            City = "Sondrio",
+            FirstName = "Cristiano",
+            LastName = "Motta",
+            Email = "chicco.motta@gmail.it",
+        };
+
+        var response = await cosmos.AddItemAsync<User>(item, item.City);
+        return Ok("Item created");
     }
 
 
