@@ -26,12 +26,12 @@ public class CosmosDbService : ICosmosDbService
         var database = _cosmosClient.GetDatabase(settings.DatabaseName);
 
         _container = database.CreateContainerIfNotExistsAsync(
-            "NewContainer",
-            "/city",
+            "Users",
+            "/partitionKey",
             400).Result;
     }
 
-    public async Task<ItemResponse<T>> AddItemAsync<T>(T item, string partitionKey) where T : class
+    public async Task<ItemResponse<T>> AddItemAsync<T>(T item, string partitionKey) where T : IPartitionKey
     {
         var response = await _container.CreateItemAsync(
             item,
@@ -41,6 +41,13 @@ public class CosmosDbService : ICosmosDbService
 
         return response;
     }
+
+    public async Task AddItemsAsync<T>(IEnumerable<T> items) where T : IPartitionKey
+    {
+        var tasks = items.Select(item => _container.CreateItemAsync(item, new PartitionKey(item.PartitionKey)));
+        await Task.WhenAll(tasks);
+    }
+
 
     public async Task<T?> GetItemAsync<T>(string id, string partitionKey) where T : class
     {

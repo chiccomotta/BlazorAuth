@@ -1,11 +1,18 @@
-﻿namespace Blazor.Api.Models;
+﻿using Blazor.Api.Models.Cosmos;
 
-public class User
+namespace Blazor.Api.Models;
+
+public class User : IPartitionKey
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public required string City { get; set; }
+    public string City { get; set; }
+    public string PartitionKey
+    {
+        get => City;
+        set => City = value;
+    }
 }
