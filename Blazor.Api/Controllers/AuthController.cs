@@ -1,4 +1,4 @@
-﻿using Blazor.Api.Models;
+﻿using Blazor.Api.Models.Cosmos;
 using Blazor.Api.Services;
 using BlazorAuthenticationTutorial.Shared;
 using BlazorAuthenticationTutorial.Shared.Models;

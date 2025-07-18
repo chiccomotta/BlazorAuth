@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
-using Blazor.Api.Models.Cosmos;
 
-namespace Blazor.Api.Models;
+namespace Blazor.Api.Models.Cosmos;
 
 /// <summary>
 /// Base class for entities with dynamic partition key resolution using attributes.

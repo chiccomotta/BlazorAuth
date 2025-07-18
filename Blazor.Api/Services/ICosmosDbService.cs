@@ -1,4 +1,4 @@
-﻿using Blazor.Api.Models;
+﻿using Blazor.Api.Models.Cosmos;
 using Microsoft.Azure.Cosmos;
 
 namespace Blazor.Api.Services;

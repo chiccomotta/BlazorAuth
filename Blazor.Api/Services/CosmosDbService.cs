@@ -3,7 +3,6 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
-using Blazor.Api.Models;
 
 namespace Blazor.Api.Services;
 
