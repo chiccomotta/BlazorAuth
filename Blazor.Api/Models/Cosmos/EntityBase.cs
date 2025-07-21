@@ -6,7 +6,9 @@ namespace Blazor.Api.Models.Cosmos;
 /// Base class for entities with dynamic partition key resolution using attributes.
 /// </summary>
 public abstract class EntityBase
-{
+{ 
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
     public virtual string PartitionKey
     {
         get

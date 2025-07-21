@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Blazor.Api.Models.Dto;
 
 namespace Blazor.Api.Controllers;
 
@@ -158,20 +159,18 @@ public class AuthController : ControllerBase
 
     [HttpPost]
     [Route("place")]
-    public async Task<IActionResult> AddPlace()
+    public async Task<IActionResult> AddPlace([FromBody] PlaceDto place)
     {
-        var place = new Place
+        var entity = new Place
         {
-            Id = Guid.NewGuid().ToString(),
-            Name = "Sample Place",
-            CreatedAt = DateTime.UtcNow,
-            City = "Sondrio",
-            Region = "Lombardia",
-            Address = new List<string> { "123 Sample St", "Sondrio", "test indirizzo" },
-            NumberOfInhabitants = 25000
+            Name = place.Name,
+            City = place.City,
+            Region = place.Region,
+            Address = place.Address,
+            NumberOfPeople = place.NumberOfPeople
         };
 
-        var response = await cosmos.AddPlaceAsync(place, place.Region);
+        var response = await cosmos.AddPlaceAsync(entity, entity.Region);
 
         if (response.StatusCode == System.Net.HttpStatusCode.Created) 
             return Ok("Place added successfully.");
