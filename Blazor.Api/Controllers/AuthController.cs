@@ -155,4 +155,27 @@ public class AuthController : ControllerBase
     {
         return Task.FromResult<IActionResult>(Ok("This is a secret endpoint! You must be authenticated to access it."));
     }
+
+    [HttpPost]
+    [Route("place")]
+    public async Task<IActionResult> AddPlace()
+    {
+        var place = new Place
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = "Sample Place",
+            CreatedAt = DateTime.UtcNow,
+            City = "Sondrio",
+            Region = "Lombardia",
+            Address = new List<string> { "123 Sample St", "Sondrio", "test indirizzo" },
+            NumberOfInhabitants = 25000
+        };
+
+        var response = await cosmos.AddPlaceAsync(place, place.Region);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Created) 
+            return Ok("Place added successfully.");
+
+        return StatusCode((int)response.StatusCode, "Failed to add place.");
+    }
 }
