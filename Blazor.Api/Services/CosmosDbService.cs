@@ -24,6 +24,7 @@ public class CosmosDbService : ICosmosDbService
             });
 
         _cosmosClient = cosmosClientBuilder.Build();
+        
         var database = _cosmosClient.GetDatabase(settings.DatabaseName);
 
         _usersContainer = database.CreateContainerIfNotExistsAsync(

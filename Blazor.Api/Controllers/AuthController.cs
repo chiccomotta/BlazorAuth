@@ -93,7 +93,6 @@ public class AuthController : ControllerBase
         }
     }
 
-
     [HttpGet]
     [Route("hello")]
     public async Task<IActionResult> Hello()
@@ -102,7 +101,6 @@ public class AuthController : ControllerBase
         return Ok("Item created");
     }
 
-    
     [HttpPost]
     [Route("feed")]
     public async Task<IActionResult> Feed()

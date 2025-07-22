@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Security.Claims;
 using System.Text;
+using Blazor.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,9 +57,12 @@ builder.Services.AddControllersWithViews()
 
 // Configura i servizi per Cosmos DB
 builder.Services.Configure<CosmosDbSettings>(builder.Configuration.GetSection("CosmosDb"));
-
 builder.Services.AddSingleton<ICosmosDbService, CosmosDbService>();
 
+// Set connectionString for PostegreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection"))
+        .UseSnakeCaseNamingConvention());
 
 var app = builder.Build();
 
