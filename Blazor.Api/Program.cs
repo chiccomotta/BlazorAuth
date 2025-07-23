@@ -52,6 +52,7 @@ builder.Services.AddControllersWithViews()
     {
         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         options.SerializerSettings.Formatting = Formatting.Indented;    // Opzionale: per una formattazione leggibile
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     });
 
 

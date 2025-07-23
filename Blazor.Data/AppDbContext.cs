@@ -17,19 +17,5 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        // Configura la chiave composta per AlbumArtist
-        modelBuilder.Entity<AlbumArtist>()
-            .HasKey(aa => aa.Id);
-        
-        // Configura le relazioni
-        modelBuilder.Entity<AlbumArtist>()
-            .HasOne(aa => aa.Album)
-            .WithMany(a => a.AlbumArtists)
-            .HasForeignKey(aa => aa.AlbumId);
-        
-        modelBuilder.Entity<AlbumArtist>()
-            .HasOne(aa => aa.Artist)
-            .WithMany(a => a.AlbumArtists)
-            .HasForeignKey(aa => aa.ArtistId);
     }
 }

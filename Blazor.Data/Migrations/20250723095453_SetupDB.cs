@@ -18,7 +18,6 @@ namespace Blazor.Data.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     title = table.Column<string>(type: "text", nullable: false),
-                    artist = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: true),
                     release_year = table.Column<int>(type: "integer", nullable: false),
                     genre = table.Column<string>(type: "text", nullable: false)
@@ -65,6 +64,30 @@ namespace Blazor.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "album_artist",
+                columns: table => new
+                {
+                    albums_id = table.Column<int>(type: "integer", nullable: false),
+                    artists_id = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_album_artist", x => new { x.albums_id, x.artists_id });
+                    table.ForeignKey(
+                        name: "fk_album_artist_albums_albums_id",
+                        column: x => x.albums_id,
+                        principalTable: "albums",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_album_artist_artists_artists_id",
+                        column: x => x.artists_id,
+                        principalTable: "artists",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "album_artists",
                 columns: table => new
                 {
@@ -91,6 +114,11 @@ namespace Blazor.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_album_artist_artists_id",
+                table: "album_artist",
+                column: "artists_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_album_artists_album_id",
                 table: "album_artists",
                 column: "album_id");
@@ -109,6 +137,9 @@ namespace Blazor.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "album_artist");
+
             migrationBuilder.DropTable(
                 name: "album_artists");
 

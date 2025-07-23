@@ -7,5 +7,5 @@ public class Artist
     public int Id { get; set; }
     public string Name { get; set; }
     public string? Biography { get; set; }
-    public ICollection<AlbumArtist> AlbumArtists { get; set; } = new List<AlbumArtist>();
+    public ICollection<Album> Albums { get; set; } = new List<Album>();
 }

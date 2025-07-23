@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blazor.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250723075410_SetupDB")]
+    [Migration("20250723095453_SetupDB")]
     partial class SetupDB
     {
         /// <inheritdoc />
@@ -23,6 +23,25 @@ namespace Blazor.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AlbumArtist", b =>
+                {
+                    b.Property<int>("AlbumsId")
+                        .HasColumnType("integer")
+                        .HasColumnName("albums_id");
+
+                    b.Property<int>("ArtistsId")
+                        .HasColumnType("integer")
+                        .HasColumnName("artists_id");
+
+                    b.HasKey("AlbumsId", "ArtistsId")
+                        .HasName("pk_album_artist");
+
+                    b.HasIndex("ArtistsId")
+                        .HasDatabaseName("ix_album_artist_artists_id");
+
+                    b.ToTable("album_artist", (string)null);
+                });
 
             modelBuilder.Entity("Artist", b =>
                 {
@@ -56,11 +75,6 @@ namespace Blazor.Data.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Artist")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("artist");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
@@ -150,17 +164,34 @@ namespace Blazor.Data.Migrations
                     b.ToTable("songs", (string)null);
                 });
 
+            modelBuilder.Entity("AlbumArtist", b =>
+                {
+                    b.HasOne("Blazor.Data.Models.Album", null)
+                        .WithMany()
+                        .HasForeignKey("AlbumsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_album_artist_albums_albums_id");
+
+                    b.HasOne("Artist", null)
+                        .WithMany()
+                        .HasForeignKey("ArtistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_album_artist_artists_artists_id");
+                });
+
             modelBuilder.Entity("Blazor.Data.Models.AlbumArtist", b =>
                 {
                     b.HasOne("Blazor.Data.Models.Album", "Album")
-                        .WithMany("AlbumArtists")
+                        .WithMany()
                         .HasForeignKey("AlbumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_album_artists_albums_album_id");
 
                     b.HasOne("Artist", "Artist")
-                        .WithMany("AlbumArtists")
+                        .WithMany()
                         .HasForeignKey("ArtistId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -183,15 +214,8 @@ namespace Blazor.Data.Migrations
                     b.Navigation("Album");
                 });
 
-            modelBuilder.Entity("Artist", b =>
-                {
-                    b.Navigation("AlbumArtists");
-                });
-
             modelBuilder.Entity("Blazor.Data.Models.Album", b =>
                 {
-                    b.Navigation("AlbumArtists");
-
                     b.Navigation("Songs");
                 });
 #pragma warning restore 612, 618

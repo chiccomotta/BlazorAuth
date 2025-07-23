@@ -9,5 +9,5 @@ public class Song
     public int DurationInSeconds { get; set; } 
     public int AlbumId { get; set; } // Chiave esterna per l'album
     public bool IsCover { get; set; }
-    public Album Album { get; set; } // Navigazione inversa
+    public Album? Album { get; set; } // Navigazione inversa
 }
