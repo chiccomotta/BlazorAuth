@@ -1,7 +1,8 @@
-﻿using Blazor.Data;
+﻿using Blazor.Data.Dto;
 using Blazor.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Blazor.Api.Controllers;
 
@@ -15,7 +16,7 @@ public class DiscogsController : ControllerBase
     {
         _dbContext = dbContext;
     }
-        
+
     [HttpPost]
     [Route("create-album")]
     public async Task<ActionResult> CreateAlbum([FromBody] AlbumDto request)
@@ -27,32 +28,52 @@ public class DiscogsController : ControllerBase
             throw new ArgumentException($"Artist with ID {request.ArtistId} does not exist.");
         }
 
+        var songs = new List<Song>();
+        
+        if (request.Songs.Any())
+        {
+            foreach (var song in request.Songs)
+            {
+                songs.Add(new Song()
+                {
+                    Title = song.Title,
+                    DurationInSeconds = song.DurationInSeconds,
+                    IsCover = song.IsCover,
+                });
+            }
+        }
+
         var album = new Album
         {
             Title = request.Title,
             Description = request.Description,
             ReleaseYear = request.ReleaseYear,
             Genre = request.Genre,
-            Songs = request.Songs,
+            Songs = songs
         };
 
-        // Add the album-artist relationship.
-        var albumArtist = new AlbumArtist { Album = album, Artist = artist };
-        _dbContext.AlbumArtists.Add(albumArtist);
-        _dbContext.Albums.Add(album);
+        // Aggiungi la relazione con l'artista
+        album.AlbumArtists.Add(new AlbumArtist
+        {
+            ArtistId = artist.Id,
+            Album = album
+        });
         
+        // Aggiungi l'album al contesto
+        await _dbContext.Albums.AddAsync(album);
         await _dbContext.SaveChangesAsync();
         return Ok(album);
     }
-}
 
-public class AlbumDto
-{
-    public string Title { get; set; }
-    public string? Description { get; set; }
-    public int ReleaseYear { get; set; }
-    public string Genre { get; set; }
-    // List of songs associated with the album.
-    public List<Song> Songs { get; set; } = [];
-    public int ArtistId { get; set; }
+    [HttpGet]
+    [Route("get-albums")]
+    public async Task<ActionResult<List<Album>>> GetAlbums()
+    {
+        var albums = await _dbContext.Albums.Include(a => a.Songs)
+            .Include(a => a.AlbumArtists)
+            .ThenInclude(aa => aa.Artist)
+            .ToListAsync();
+        
+        return Ok(albums);
+    }
 }

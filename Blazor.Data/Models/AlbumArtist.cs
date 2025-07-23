@@ -1,18 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Blazor.Data.Models;
 
-public class AlbumArtist
+public partial class AlbumArtist
 {
-    [Key]
     public int Id { get; set; }
 
-    [ForeignKey(nameof(Album))]
     public int AlbumId { get; set; }
-    public Album Album { get; set; } = null!;
 
-    [ForeignKey(nameof(Artist))]
     public int ArtistId { get; set; }
-    public Artist Artist { get; set; } = null!;
+
+    public virtual Album Album { get; set; } = null!;
+
+    public virtual Artist Artist { get; set; } = null!;
 }

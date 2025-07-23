@@ -1,14 +1,14 @@
 using Blazor.Api.Models.Cosmos;
 using Blazor.Api.Services;
+using Blazor.Data.Models;
 using BlazorAuthenticationTutorial.Shared.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Security.Claims;
 using System.Text;
-using Blazor.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

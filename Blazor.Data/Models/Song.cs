@@ -1,13 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Blazor.Data.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public class Song
+namespace Blazor.Data.Models;
+
+public partial class Song
 {
-    [Key]
     public int Id { get; set; }
-    public string Title { get; set; }
-    public int DurationInSeconds { get; set; } 
-    public int AlbumId { get; set; } // Chiave esterna per l'album
+
+    public string Title { get; set; } = null!;
+
+    public int DurationInSeconds { get; set; }
+
+    public int AlbumId { get; set; }
+
     public bool IsCover { get; set; }
-    public Album? Album { get; set; } // Navigazione inversa
+
+    public virtual Album Album { get; set; } = null!;
 }
+
+

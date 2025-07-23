@@ -1,11 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Blazor.Data.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public class Artist
+namespace Blazor.Data.Models;
+
+public partial class Artist
 {
-    [Key]
     public int Id { get; set; }
-    public string Name { get; set; }
+
+    public string Name { get; set; } = null!;
+
     public string? Biography { get; set; }
-    public ICollection<Album> Albums { get; set; } = new List<Album>();
+
+    public virtual ICollection<AlbumArtist> AlbumArtists { get; set; } = new List<AlbumArtist>();
 }
