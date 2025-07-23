@@ -17,5 +17,3 @@ public partial class Song
 
     public virtual Album Album { get; set; } = null!;
 }
-
-

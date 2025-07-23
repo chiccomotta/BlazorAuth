@@ -1,4 +1,5 @@
 ﻿using Blazor.Data.Dto;
+using Blazor.Data.Extensions;
 using Blazor.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,29 +28,14 @@ public class DiscogsController : ControllerBase
         {
             throw new ArgumentException($"Artist with ID {request.ArtistId} does not exist.");
         }
-
-        var songs = new List<Song>();
         
-        if (request.Songs.Any())
-        {
-            foreach (var song in request.Songs)
-            {
-                songs.Add(new Song()
-                {
-                    Title = song.Title,
-                    DurationInSeconds = song.DurationInSeconds,
-                    IsCover = song.IsCover,
-                });
-            }
-        }
-
         var album = new Album
         {
             Title = request.Title,
             Description = request.Description,
             ReleaseYear = request.ReleaseYear,
             Genre = request.Genre,
-            Songs = songs
+            Songs = request.Songs.ToSongEntities(),
         };
 
         // Aggiungi la relazione con l'artista
