@@ -14,6 +14,8 @@ public class CosmosDbService : ICosmosDbService
 
     public CosmosDbService(IOptions<CosmosDbSettings> options)
     {
+        return;
+        
         var settings = options.Value;
 
         // Use CosmosClientBuilder to configure the client instead of CosmosJsonDotNetSerializer
