@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blazor.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250723132551_SetupDB")]
-    partial class SetupDB
+    [Migration("20250724075317_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,10 +77,10 @@ namespace Blazor.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_album_artists");
 
-                    b.HasIndex(new[] { "AlbumId" }, "ix_album_artists_album_id")
+                    b.HasIndex("AlbumId")
                         .HasDatabaseName("ix_album_artists_album_id");
 
-                    b.HasIndex(new[] { "ArtistId" }, "ix_album_artists_artist_id")
+                    b.HasIndex("ArtistId")
                         .HasDatabaseName("ix_album_artists_artist_id");
 
                     b.ToTable("album_artists", (string)null);
@@ -139,7 +139,7 @@ namespace Blazor.Data.Migrations
                     b.HasKey("Id")
                         .HasName("pk_songs");
 
-                    b.HasIndex(new[] { "AlbumId" }, "ix_songs_album_id")
+                    b.HasIndex("AlbumId")
                         .HasDatabaseName("ix_songs_album_id");
 
                     b.ToTable("songs", (string)null);
