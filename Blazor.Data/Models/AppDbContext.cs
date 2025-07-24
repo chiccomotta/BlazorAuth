@@ -9,9 +9,7 @@ public partial class AppDbContext : DbContext
     public DbSet<AlbumArtist> AlbumArtists { get; set; }
     public DbSet<Song> Songs { get; set; }
     
-    
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
-
 }

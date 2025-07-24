@@ -19,6 +19,26 @@ public class DiscogsController : ControllerBase
     }
 
     [HttpPost]
+    [Route("create-artist")]
+    public async Task<ActionResult> CreateArtist([FromBody] ArtistDto request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            throw new ArgumentException("Artist name cannot be empty.");
+        }
+        
+        var artist = new Artist
+        {
+            Name = request.Name,
+            Biography = request.Biography
+        };
+        
+        await _dbContext.Artists.AddAsync(artist);
+        await _dbContext.SaveChangesAsync();
+        return Ok(artist);
+    }
+
+    [HttpPost]
     [Route("create-album")]
     public async Task<ActionResult> CreateAlbum([FromBody] AlbumDto request)
     {
@@ -55,9 +75,8 @@ public class DiscogsController : ControllerBase
     [Route("get-albums")]
     public async Task<ActionResult<List<Album>>> GetAlbums()
     {
-        var albums = await _dbContext.Albums.Include(a => a.Songs)
-            .Include(a => a.AlbumArtists)
-            .ThenInclude(aa => aa.Artist)
+        var albums = await _dbContext.Albums
+            .Include(a => a.Songs)
             .ToListAsync();
         
         return Ok(albums);
